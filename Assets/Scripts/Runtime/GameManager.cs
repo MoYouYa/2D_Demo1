@@ -11,15 +11,16 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    private static GameManager instance;
+    public static GameManager Instance
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        get {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+            }
+            return instance; 
+        }
     }
 
     public void LoadMap(string mapFilePath)
@@ -120,14 +121,20 @@ public class GameManager : MonoBehaviour
         Transform[] children= this.GetComponentsInChildren<Transform>();
         foreach(Transform child in children)
         {
-            DestroyChildrenObjects(child);
+            Debug.Log(child.name);
+            if (child != this.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            //DestroyChildrenObjects(child);
         }
+
     }
 
     private void DestroyChildrenObjects(Transform _transform)
     {
         Transform[] children= _transform.GetComponentsInChildren<Transform>();
-        if (children.Length == 0)
+        if (children.Length == 1)
         {
             Destroy(_transform.gameObject);
         }

@@ -464,6 +464,27 @@
           </rotation>
           <children />
         </ObjectInfoNode>
+        <ObjectInfoNode>
+          <name>Destination</name>
+          <prefabPath>Assets/Resources/Prefabs/Destination.prefab</prefabPath>
+          <position>
+            <x>10.5</x>
+            <y>-0.27</y>
+            <z>0.8945675</z>
+          </position>
+          <rotation>
+            <x>-0</x>
+            <y>-0</y>
+            <z>-0</z>
+            <w>1</w>
+            <eulerAngles>
+              <x>-0</x>
+              <y>0</y>
+              <z>0</z>
+            </eulerAngles>
+          </rotation>
+          <children />
+        </ObjectInfoNode>
       </children>
     </ObjectInfoNode>
   </children>
