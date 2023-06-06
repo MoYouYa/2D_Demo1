@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadMap(string mapFilePath)
     {
+        Debug.Log("Start to load map.");
         Func<List<GameObject>> GetExistingGameObjects = delegate ()
         {
             List<GameObject> list = new List<GameObject>();
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
 
             //filePath = "";
             //EditorUtility.DisplayDialog("Load File Message", "Loading file successul!", "OK");
-            Debug.Log("Loading file "+mapFilePath+ " successul!");
+            Debug.Log("Loading file "+mapFilePath+ " successully!");
         }
         catch (Exception e)
         {
@@ -118,32 +119,17 @@ public class GameManager : MonoBehaviour
 
     public void DestroyMap()
     {
+        Debug.Log("Start to destroy map.");
         Transform[] children= this.GetComponentsInChildren<Transform>();
         foreach(Transform child in children)
         {
-            Debug.Log(child.name);
+            //Debug.Log(child.name);
             if (child != this.transform)
             {
+                child.name = child.name + "_toBeDestroyed";//Destroy 不是立即执行（调用之后不会立即销毁，不是这个函数调用了，下一个语句前就销毁）的，如果不改名字就会影响在同一帧调用的 LoadMap(string mapFilePath) 函数，使其无法生成新的物体
                 Destroy(child.gameObject);
             }
-            //DestroyChildrenObjects(child);
         }
-
-    }
-
-    private void DestroyChildrenObjects(Transform _transform)
-    {
-        Transform[] children= _transform.GetComponentsInChildren<Transform>();
-        if (children.Length == 1)
-        {
-            Destroy(_transform.gameObject);
-        }
-        else
-        {
-            foreach(Transform child in children)
-            {
-                DestroyChildrenObjects(child);
-            }
-        }
+        Debug.Log("Destroy map successfully!");
     }
 }

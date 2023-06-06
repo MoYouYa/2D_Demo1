@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         GetKeyboardInput();
-        AnimationAndStateTransition();
+        StateAndAnimationTransition();
     }
 
     private void Init()
@@ -67,12 +67,13 @@ public class Player : MonoBehaviour
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x,jumpSpeed);
                 jumpCount++;
+                AudioManager.Instance.PlayAudio("PlayerJumpAudio");
             }
-            Debug.Log("jumpCount=" + jumpCount);
+            //Debug.Log("jumpCount=" + jumpCount);
         }
     }
 
-    private void AnimationAndStateTransition()
+    private void StateAndAnimationTransition()
     {
         float FLOAT_PERCISION = 1e-5f;
         Vector2 newSpeed=GetComponent<Rigidbody2D>().velocity;
@@ -81,7 +82,6 @@ public class Player : MonoBehaviour
             case PlayerState.Idle:
                 if (newSpeed.x >= FLOAT_PERCISION || newSpeed.x<=-FLOAT_PERCISION)
                 {
-                    //Debug.Log("newSpeed.x=" + newSpeed.x);
                     playerState = PlayerState.Run;
                 }
                 if (newSpeed.y >= jumpSpeed- FLOAT_PERCISION)
@@ -97,13 +97,7 @@ public class Player : MonoBehaviour
                 if (newSpeed.y >= jumpSpeed- FLOAT_PERCISION)
                 {
                     playerState = PlayerState.Jump;
-                    //Debug.Log("newSpeed.y=" + newSpeed.y.ToString());
                 }
-                //else if (newSpeed.y <= -FLOAT_PERCISION*5.0f /*-(jumpSpeed - FLOAT_PERCISION) /4.0f*/)
-                //{
-                //    playerState = PlayerState.Fall;
-                //    Debug.Log("newSpeed.y=" + newSpeed.y.ToString());
-                //}
                 break;
             case PlayerState.Jump:
                 if (newSpeed.y <= -FLOAT_PERCISION)
@@ -122,9 +116,15 @@ public class Player : MonoBehaviour
                     playerState= PlayerState.Idle;
                 }
                 break;
-            case PlayerState.Hurt:
+            case PlayerState.Hurt: 
+                playerState= PlayerState.Death;
+                break;
+            case PlayerState.Death:
+                UIManager.Instance.GameOver(false);
                 break;
         }
+
+        CheckPlayerIsOverScreen();
 
         //调整主角的面向
         if (newSpeed.x >= 1e-5f)
@@ -148,5 +148,28 @@ public class Player : MonoBehaviour
         animator.SetInteger("playerState", (int)playerState);
     }
 
+    //private void HealthStateTransition()
+    //{
+
+    //}
+    private void CheckPlayerIsOverScreen()
+    {
+        if (transform.position.y <= -3.0f)
+        {
+            Debug.Log("Over Screen."+playerState);
+            if (playerState < PlayerState.Hurt)
+            {
+                playerState= PlayerState.Hurt;
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enermy")
+        {
+            playerState= PlayerState.Hurt;
+        }
+    }
 
 }

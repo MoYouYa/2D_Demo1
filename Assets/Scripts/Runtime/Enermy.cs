@@ -6,9 +6,12 @@ public class Enermy : MonoBehaviour
 {
     protected string enermyType;
     // Start is called before the first frame update
-
-    public string GetEnermyType()
+    public Enermy()
     {
-        return enermyType;
+        this.tag = "Enermy";
+    }
+    public string EnermyType
+    {
+        get { return this.enermyType; }
     }
 }

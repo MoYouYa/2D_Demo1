@@ -25,5 +25,6 @@ public class Goods : MonoBehaviour
             Destroy(this.gameObject);
         }
         UIManager.Instance.AddScore(this.GoodsScore);
+        AudioManager.Instance.PlayAudio("GetGoodsAudio");
     }
 }
