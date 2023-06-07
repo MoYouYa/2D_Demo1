@@ -116,7 +116,8 @@ public class Player : MonoBehaviour
                     playerState= PlayerState.Idle;
                 }
                 break;
-            case PlayerState.Hurt: 
+            case PlayerState.Hurt:
+                AudioManager.Instance.PlayAudio("PlayerHurtAudio");
                 playerState= PlayerState.Death;
                 break;
             case PlayerState.Death:

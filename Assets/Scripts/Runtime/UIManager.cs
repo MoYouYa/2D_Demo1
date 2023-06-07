@@ -9,11 +9,8 @@ using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject LevelUI;
-    public GameObject MainUI;
-    public Text scoreText;
-    public Button puaseButton;
-    public GameObject continueButton,nextLevelButton,restartButton,returnMenuButton;
+    public GameObject mainFram,optionFram,levelUI,gamePuaseUI,victryUI,defeatUI;
+    private Text scoreText;
 
 
     // Start is called before the first frame update
@@ -30,110 +27,78 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        EnterMainFram();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape) && puaseButton.enabled)
-        {
-            GamePuase();
-        }
-    }
     public void EnterMainFram()
     {
-        MainUI.SetActive(true);
-        LevelUI.SetActive(false);
+        mainFram.SetActive(true);
+        optionFram.SetActive(false);
+        levelUI.SetActive(false);
+        gamePuaseUI.SetActive(false);
+        victryUI.SetActive(false); 
+        defeatUI.SetActive(false);
         GameManager.Instance.DestroyMap();
-        AudioManager.Instance.StopAudio("BGM");
+        AudioManager.Instance.StopAudio("LevelBGM");
+        AudioManager.Instance.PlayAudio("MenuBGM");
     }
 
     public void EnterOptionFram()
     {
-
+        mainFram.SetActive(false);
+        optionFram.SetActive(true);
+        levelUI.SetActive(false);
+        gamePuaseUI.SetActive(false);
+        victryUI.SetActive(false);
+        defeatUI.SetActive(false);
     }
     public void EnterLevel(int levelIndex)
     {
-        MainUI.SetActive(false);
-        LevelUI.SetActive(true);
+        mainFram.SetActive(false);
+        optionFram.SetActive(false);
+        levelUI.SetActive(true);
+        gamePuaseUI.SetActive(false);
+        victryUI.SetActive(false);
+        defeatUI.SetActive(false);
 
-        puaseButton.enabled = true;
-        continueButton.SetActive(false);
-        nextLevelButton.SetActive(false);
-        restartButton.SetActive(false);
-        returnMenuButton.SetActive(false);
-
-        scoreText.text = ("0");
+        GetScoreText().text = ("0");
 
         GameManager.Instance.DestroyMap();
         GameManager.Instance.LoadMap("Assets/Resources/Maps/Map"+levelIndex.ToString()+".xml");
 
-        AudioManager.Instance.PlayAudio("BGM");
+        //AudioManager.Instance.PlayAudio("BGM");
+        AudioManager.Instance.StopAudio("MenuBGM");
+        AudioManager.Instance.PlayAudio("LevelBGM");
     }
 
     public void AddScore(int score)
     {
-        scoreText.text=(Int32.Parse(scoreText.text)  + score).ToString();
+        GetScoreText().text=(Int32.Parse(GetScoreText().text)  + score).ToString();
     }
 
     public void GameOver(bool isWin)
     {
         Debug.Log("Gameover" + isWin);
-        puaseButton.enabled = false;
-        continueButton.SetActive(false);
-        if (isWin) {
-            nextLevelButton.SetActive(true);
+        if(isWin)
+        {
+            victryUI.SetActive(true);
         }
         else
         {
-            nextLevelButton.SetActive(false);
+            defeatUI.SetActive(true);
         }
-        restartButton.SetActive(true);
-        returnMenuButton.SetActive(true);
+        GameManager.Instance.SetPlayerPuase();
         //GameManager.Instance.DestroyMap();
-        SetPlayerPause();
+        //SetPlayerPause();
     }
 
     public void GamePuase()
     {
-        puaseButton.enabled = false;
-        continueButton.SetActive(true);
-        nextLevelButton.SetActive(false);
-        restartButton.SetActive(true);
-        returnMenuButton.SetActive(true);
-        SetPlayerPause();
+        gamePuaseUI.SetActive(true);
+        GameManager.Instance.SetPlayerPuase();
     }
 
     public void GameContinue()
     {
-        puaseButton.enabled = true;
-        continueButton.SetActive(false);
-        nextLevelButton.SetActive(false);
-        restartButton.SetActive(false);
-        returnMenuButton.SetActive(false);
-        SetPlayerContinue();
-    }
-    private void SetPlayerPause()
-    {
-        Player player = FindObjectOfType<Player>();
-        if(player != null )
-        {
-            player.enabled= false;
-            player.GetComponent<Rigidbody2D>().Sleep();
-        }
-        //GetComponent<Player>().enabled= false;
-    }
-
-    private void SetPlayerContinue()
-    {
-        Player player = FindObjectOfType<Player>();
-        if (player != null)
-        {
-            player.enabled = true;
-            player.GetComponent<Rigidbody2D>().WakeUp();
-        }
+        gamePuaseUI.SetActive(false);
+        GameManager.Instance.SetPlayerContinue();
     }
 
     public void ExitGame()
@@ -143,5 +108,23 @@ public class UIManager : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private Text GetScoreText()
+    {
+        if(scoreText == null)
+        {
+            Text[] texts = levelUI.GetComponentsInChildren<Text>();
+            foreach (Text text in texts)
+            {
+                Debug.Log(text.name);
+                if (text.name == "ScoreText")
+                {
+                    scoreText = text;
+                    break;
+                }
+            }
+        }
+        return scoreText;
     }
 }

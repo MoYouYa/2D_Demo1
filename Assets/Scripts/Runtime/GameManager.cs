@@ -23,23 +23,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        UIManager.Instance.EnterMainFram();
+        //AudioManager.Instance.PlayAudio("BGM");
+    }
+
     public void LoadMap(string mapFilePath)
     {
         Debug.Log("Start to load map.");
-        Func<List<GameObject>> GetExistingGameObjects = delegate ()
-        {
-            List<GameObject> list = new List<GameObject>();
-            GameObject[] gameObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
-
-            foreach (GameObject gameObject in gameObjects)
-            {
-                if (gameObject.scene.isLoaded)
-                {
-                    list.Add(gameObject);
-                }
-            }
-            return list;
-        };
 
         FileStream fileStream = FileStream.Null as FileStream;
         try
@@ -48,21 +40,19 @@ public class GameManager : MonoBehaviour
             XmlSerializer xml = new XmlSerializer(typeof(ObjectInfoNode));
             ObjectInfoNode objectsInfo = xml.Deserialize(fileStream) as ObjectInfoNode;
 
-            List<GameObject> exitingGameObjects = GetExistingGameObjects();
+            //List<GameObject> exitingGameObjects = GetExistingGameObjects();
             for (int i = 0; i < objectsInfo.children.Count; i++)
             {
                 ObjectInfoNode child = objectsInfo.children[i];
-                CreateObjects(transform, child, exitingGameObjects);
+                CreateObjects(transform, child/*, exitingGameObjects*/);
             }
 
             //filePath = "";
-            //EditorUtility.DisplayDialog("Load File Message", "Loading file successul!", "OK");
             Debug.Log("Loading file "+mapFilePath+ " successully!");
         }
         catch (Exception e)
         {
             Debug.LogException(e);
-            //EditorUtility.DisplayDialog("Load File Error Message", "Loading file is failed!\nError message is:\n" + e.Message, "OK");
         }
         finally
         {
@@ -70,46 +60,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CreateObjects(Transform transform, ObjectInfoNode objectsInfo, List<GameObject> exitingGameObjects)
+    private void CreateObjects(Transform transform, ObjectInfoNode objectsInfo/*, List<GameObject> exitingGameObjects*/)
     {
-        GameObject gameObject = IsExistingGameObject(objectsInfo.name, exitingGameObjects);
-
-        if (gameObject == null)
+        if (GetPrefabName(objectsInfo.prefabPath) == "")
         {
-            if (GetPrefabName(objectsInfo.prefabPath) == "")
+            GameObject _object = new GameObject(objectsInfo.name);
+            _object.transform.parent = transform;
+            foreach (ObjectInfoNode child in objectsInfo.children)
             {
-                GameObject _object = new GameObject(objectsInfo.name);
-                _object.transform.parent = transform;
-                foreach (ObjectInfoNode child in objectsInfo.children)
-                {
-                    CreateObjects(_object.transform, child, exitingGameObjects);
-                }
-            }
-            else
-            {
-                //Debug.Log(Resources.Load("Prefabs/" + GetPrefabName(objectsInfo.prefabPath)).GetType());
-                Instantiate(Resources.Load("Prefabs/" + GetPrefabName(objectsInfo.prefabPath)), objectsInfo.position, objectsInfo.rotation, transform).name = objectsInfo.name;         
+                CreateObjects(_object.transform, child/*, exitingGameObjects*/);
             }
         }
         else
         {
-            foreach (ObjectInfoNode child in objectsInfo.children)
-            {
-                CreateObjects(gameObject.transform, child, exitingGameObjects);
-            }
+            //Debug.Log(Resources.Load("Prefabs/" + GetPrefabName(objectsInfo.prefabPath)).GetType());
+            Instantiate(Resources.Load("Prefabs/" + GetPrefabName(objectsInfo.prefabPath)), objectsInfo.position, objectsInfo.rotation, transform).name = objectsInfo.name;
         }
-    }
-
-    private GameObject IsExistingGameObject(string name, List<GameObject> gameObjects)
-    {
-        foreach (GameObject gameObject in gameObjects)
-        {
-            if (gameObject.name.Equals(name))
-            {
-                return gameObject;
-            }
-        }
-        return null;
     }
 
     private string GetPrefabName(string s)
@@ -131,5 +97,25 @@ public class GameManager : MonoBehaviour
             }
         }
         Debug.Log("Destroy map successfully!");
+    }
+
+    public void SetPlayerPuase()
+    {
+        Player player = FindObjectOfType<Player>();
+        if (player != null)
+        {
+            player.enabled = false;
+            player.GetComponent<Rigidbody2D>().Sleep();
+        }
+    }
+
+    public void SetPlayerContinue()
+    {
+        Player player = FindObjectOfType<Player>();
+        if (player != null)
+        {
+            player.enabled = true;
+            player.GetComponent<Rigidbody2D>().WakeUp();
+        }
     }
 }

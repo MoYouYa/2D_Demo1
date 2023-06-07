@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Sound
 {
-    [Header("Audio Name")]
+    //[Header("Audio Name")]
     public string name;
 
-    [Header("Audio Source")]
+    //[Header("Audio Source")]
     public AudioClip audioClip;
 
-    [Header("Audio Mixer Group")]
+    //[Header("Audio Mixer Group")]
     public AudioMixerGroup mixerGroup;
 
 }
@@ -22,8 +23,10 @@ public class AudioManager : MonoBehaviour
 {
     // Start is called before the first frame update
     private static AudioManager instance;
+    public AudioMixer audioMixer;
     public List<Sound> sounds;
     private Dictionary<string,AudioSource> audioSources;
+
     public static AudioManager Instance
     {
         get { 
@@ -35,8 +38,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
-    private void Start()
+    private void Awake()
     {
         audioSources= new Dictionary<string,AudioSource>();
 
@@ -50,6 +52,11 @@ public class AudioManager : MonoBehaviour
 
             audioSources.Add(sound.name,audioSource);
         }
+    }
+
+    private void Start()
+    {
+
     }
 
     public void PlayAudio(string name)
@@ -76,5 +83,15 @@ public class AudioManager : MonoBehaviour
         {
             audioSources[name].Stop();
         }
+    }
+
+    public void SetBGMVolum(Slider slider)
+    {
+        audioMixer.SetFloat("BGM", slider.value);
+    }
+
+    public void SetSFXVolum(Slider slider)
+    {
+        audioMixer.SetFloat("SFX", slider.value);
     }
 }
