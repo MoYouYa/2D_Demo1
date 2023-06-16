@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private PlayerState playerState;
     private FaceDir faceDir;
     private int jumpCount;
+    private float deathTime;
     private float runSpeed;
     private float jumpSpeed;
 
@@ -26,22 +27,31 @@ public class Player : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Init();
     }
 
     private void Update()
     {
-        GetKeyboardInput();
+        if (playerState < PlayerState.Hurt)
+        {
+            GetKeyboardInput();
+        }
+    }
+
+    private void LateUpdate()
+    {
         StateAndAnimationTransition();
     }
 
     private void Init()
     {
+        tag = "Player";
         playerState = PlayerState.Idle;
         faceDir = FaceDir.Right;
         jumpCount = 0;
+        deathTime = 0;
         runSpeed = 1.0f;
         jumpSpeed = 3.4f;
         animator = GetComponent<Animator>();
@@ -121,11 +131,22 @@ public class Player : MonoBehaviour
                 playerState= PlayerState.Death;
                 break;
             case PlayerState.Death:
-                UIManager.Instance.GameOver(false);
+                if (GetComponent<CircleCollider2D>().enabled)
+                {
+                    GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, jumpSpeed / 2);
+                    GetComponent<CircleCollider2D>().enabled = false;
+                }
+                if(deathTime<=Time.time)
+                {
+                    UIManager.Instance.GameOver(false);
+                }
                 break;
         }
 
-        CheckPlayerIsOverScreen();
+        if (IsPlayerOverScreen() && playerState<PlayerState.Hurt)
+        {
+            playerState= PlayerState.Hurt;
+        }
 
         //调整主角的面向
         if (newSpeed.x >= 1e-5f)
@@ -149,20 +170,18 @@ public class Player : MonoBehaviour
         animator.SetInteger("playerState", (int)playerState);
     }
 
-    //private void HealthStateTransition()
-    //{
-
-    //}
-    private void CheckPlayerIsOverScreen()
+    public void Killed()
     {
-        if (transform.position.y <= -3.0f)
+        if (playerState < PlayerState.Hurt)
         {
-            Debug.Log("Over Screen."+playerState);
-            if (playerState < PlayerState.Hurt)
-            {
-                playerState= PlayerState.Hurt;
-            }
+            playerState= PlayerState.Hurt;
+            deathTime = Time.time + 1.0f ;
         }
+    }
+
+    private bool IsPlayerOverScreen()
+    {
+        return transform.position.y <= -3.0f;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

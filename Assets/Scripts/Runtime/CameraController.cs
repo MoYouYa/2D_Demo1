@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         {
             player = FindObjectOfType<Player>();
         }
-        border=new Border(float.MinValue,float.MaxValue,float.MaxValue,-1.0f);
+        border=new Border(float.MinValue,float.MaxValue,2.0f,-1.0f);
     }
 
     // Update is called once per frame

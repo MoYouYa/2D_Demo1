@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Enermy : MonoBehaviour
 {
-    protected string enermyType;
+
     // Start is called before the first frame update
-    public Enermy()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        this.tag = "Enermy";
-    }
-    public string EnermyType
-    {
-        get { return this.enermyType; }
+        if (collision.tag == "Player")
+        {
+            GameManager.Instance.GetPlayer().Killed();
+        }
     }
 }

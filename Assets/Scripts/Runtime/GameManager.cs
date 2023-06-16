@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     private static GameManager instance;
+    private Player player;
+    private List<Vulture> vultures;
     public static GameManager Instance
     {
         get {
@@ -99,9 +101,33 @@ public class GameManager : MonoBehaviour
         Debug.Log("Destroy map successfully!");
     }
 
-    public void SetPlayerPuase()
+    public Player GetPlayer()
     {
-        Player player = FindObjectOfType<Player>();
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>();
+        }
+        if (player != null)
+        {
+            return player;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void GamePuase()
+    {
+        SetPlayerPuase();
+        SetVulturesPuase();
+    }
+    private void SetPlayerPuase()
+    {
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>();
+        }
         if (player != null)
         {
             player.enabled = false;
@@ -109,13 +135,58 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerContinue()
+    private void SetVulturesPuase()
     {
-        Player player = FindObjectOfType<Player>();
+        if (vultures == null)
+        {
+            vultures = new List<Vulture>();
+        }else if (vultures[0]== null)
+        {
+            vultures.Clear();
+        }
+        if(vultures.Count == 0)
+        {
+            vultures= new List<Vulture>(FindObjectsOfType<Vulture>());
+        }
+        if (vultures.Count > 0)
+        {
+            foreach(Vulture vulture in vultures)
+            {
+                if (vulture != null)
+                {
+                    Debug.Log($"Set {vulture.name} Puase");
+                    vulture.enabled = false;
+                }
+            }
+        }
+    }
+
+    public void GameContinue()
+    {
+        SetPlayerContinue();
+        SetVulturesContinue();
+    }
+
+    private void SetPlayerContinue()
+    {
         if (player != null)
         {
             player.enabled = true;
             player.GetComponent<Rigidbody2D>().WakeUp();
+        }
+    }
+
+    private void SetVulturesContinue()
+    {
+        if (vultures.Count > 0)
+        {
+            foreach (Vulture vulture in vultures)
+            {
+                if (vulture != null)
+                {
+                    vulture.enabled = true;
+                }
+            }
         }
     }
 }

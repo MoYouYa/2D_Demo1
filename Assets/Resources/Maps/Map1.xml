@@ -401,8 +401,8 @@
                   <name>Gem</name>
                   <prefabPath>Assets/Resources/Prefabs/Gem.prefab</prefabPath>
                   <position>
-                    <x>6.290251</x>
-                    <y>1.27656</y>
+                    <x>6.059251</x>
+                    <y>-0.62344</y>
                     <z>7.89456749</z>
                   </position>
                   <rotation>
@@ -422,8 +422,8 @@
                   <name>Gem (1)</name>
                   <prefabPath>Assets/Resources/Prefabs/Gem.prefab</prefabPath>
                   <position>
-                    <x>6.490251</x>
-                    <y>1.27656</y>
+                    <x>6.259251</x>
+                    <y>-0.62344</y>
                     <z>7.89456749</z>
                   </position>
                   <rotation>
@@ -484,6 +484,71 @@
             </eulerAngles>
           </rotation>
           <children />
+        </ObjectInfoNode>
+        <ObjectInfoNode>
+          <name>Enermies</name>
+          <prefabPath />
+          <position>
+            <x>-1.159749</x>
+            <y>-0.723440051</y>
+            <z>7.89456749</z>
+          </position>
+          <rotation>
+            <x>-0</x>
+            <y>-0</y>
+            <z>-0</z>
+            <w>1</w>
+            <eulerAngles>
+              <x>-0</x>
+              <y>0</y>
+              <z>0</z>
+            </eulerAngles>
+          </rotation>
+          <children>
+            <ObjectInfoNode>
+              <name>Vultures</name>
+              <prefabPath />
+              <position>
+                <x>-1.159749</x>
+                <y>-0.723440051</y>
+                <z>7.89456749</z>
+              </position>
+              <rotation>
+                <x>-0</x>
+                <y>-0</y>
+                <z>-0</z>
+                <w>1</w>
+                <eulerAngles>
+                  <x>-0</x>
+                  <y>0</y>
+                  <z>0</z>
+                </eulerAngles>
+              </rotation>
+              <children>
+                <ObjectInfoNode>
+                  <name>Vulture</name>
+                  <prefabPath>Assets/Resources/Prefabs/Vulture.prefab</prefabPath>
+                  <position>
+                    <x>4.575251</x>
+                    <y>0.007559955</y>
+                    <z>7.89456749</z>
+                  </position>
+                  <rotation>
+                    <x>-0</x>
+                    <y>-0</y>
+                    <z>-0</z>
+                    <w>1</w>
+                    <eulerAngles>
+                      <x>-0</x>
+                      <y>0</y>
+                      <z>0</z>
+                    </eulerAngles>
+                  </rotation>
+                  <children />
+                </ObjectInfoNode>
+              </children>
+            </ObjectInfoNode>
+          </children>
         </ObjectInfoNode>
       </children>
     </ObjectInfoNode>

@@ -27,6 +27,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        ListeningInput();
+    }
+
+    private void ListeningInput()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GamePuase();
+        }
+    }
     public void EnterMainFram()
     {
         mainFram.SetActive(true);
@@ -75,7 +87,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOver(bool isWin)
     {
-        Debug.Log("Gameover" + isWin);
+        Debug.Log("Gameover and result is " + isWin);
         if(isWin)
         {
             victryUI.SetActive(true);
@@ -84,7 +96,7 @@ public class UIManager : MonoBehaviour
         {
             defeatUI.SetActive(true);
         }
-        GameManager.Instance.SetPlayerPuase();
+        GameManager.Instance.GamePuase();
         //GameManager.Instance.DestroyMap();
         //SetPlayerPause();
     }
@@ -92,13 +104,13 @@ public class UIManager : MonoBehaviour
     public void GamePuase()
     {
         gamePuaseUI.SetActive(true);
-        GameManager.Instance.SetPlayerPuase();
+        GameManager.Instance.GamePuase();
     }
 
     public void GameContinue()
     {
         gamePuaseUI.SetActive(false);
-        GameManager.Instance.SetPlayerContinue();
+        GameManager.Instance.GameContinue();
     }
 
     public void ExitGame()
