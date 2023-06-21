@@ -13,6 +13,7 @@ public enum FaceDir
     Left, Right
 }
 
+
 public class Player : MonoBehaviour
 {
 
@@ -85,42 +86,41 @@ public class Player : MonoBehaviour
 
     private void StateAndAnimationTransition()
     {
-        float FLOAT_PERCISION = 1e-5f;
         Vector2 newSpeed=GetComponent<Rigidbody2D>().velocity;
         switch (playerState)
         {
             case PlayerState.Idle:
-                if (newSpeed.x >= FLOAT_PERCISION || newSpeed.x<=-FLOAT_PERCISION)
+                if (newSpeed.x >= CustomData.FLOAT_PERCISION || newSpeed.x<=-CustomData.FLOAT_PERCISION)
                 {
                     playerState = PlayerState.Run;
                 }
-                if (newSpeed.y >= jumpSpeed- FLOAT_PERCISION)
+                if (newSpeed.y >= jumpSpeed- CustomData.FLOAT_PERCISION)
                 {
                     playerState= PlayerState.Jump;
                 }
                 break;
             case PlayerState.Run:
-                if(newSpeed.x>=-FLOAT_PERCISION && newSpeed.x <= FLOAT_PERCISION)
+                if(newSpeed.x>=-CustomData.FLOAT_PERCISION && newSpeed.x <= CustomData.FLOAT_PERCISION)
                 {
                     playerState= PlayerState.Idle;
                 }
-                if (newSpeed.y >= jumpSpeed- FLOAT_PERCISION)
+                if (newSpeed.y >= jumpSpeed- CustomData.FLOAT_PERCISION)
                 {
                     playerState = PlayerState.Jump;
                 }
                 break;
             case PlayerState.Jump:
-                if (newSpeed.y <= -FLOAT_PERCISION)
+                if (newSpeed.y <= -CustomData.FLOAT_PERCISION)
                 {
                     playerState= PlayerState.Fall;
                 }
                 break;
             case PlayerState.Fall:
-                if (newSpeed.y >= jumpSpeed-FLOAT_PERCISION)
+                if (newSpeed.y >= jumpSpeed-CustomData.FLOAT_PERCISION)
                 {
                     playerState= PlayerState.Jump;
                 }
-                else if(newSpeed.y>=-FLOAT_PERCISION /*&& newSpeed.y <= FLOAT_PERCISION*/)
+                else if(newSpeed.y>=-CustomData.FLOAT_PERCISION /*&& newSpeed.y <= CustomData.FLOAT_PERCISION*/)
                 {
                     jumpCount = 0;
                     playerState= PlayerState.Idle;

@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         FileStream fileStream = FileStream.Null as FileStream;
         try
         {
-            fileStream = new FileStream(mapFilePath, System.IO.FileMode.Open);
+            fileStream = new FileStream(Application.dataPath+mapFilePath, FileMode.Open);
             XmlSerializer xml = new XmlSerializer(typeof(ObjectInfoNode));
             ObjectInfoNode objectsInfo = xml.Deserialize(fileStream) as ObjectInfoNode;
 

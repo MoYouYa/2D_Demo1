@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 {
     public GameObject mainFram,optionFram,levelUI,gamePuaseUI,victryUI,defeatUI;
     private Text scoreText;
+    //private Camera mainCamera;
 
 
     // Start is called before the first frame update
@@ -72,8 +73,10 @@ public class UIManager : MonoBehaviour
 
         GetScoreText().text = ("0");
 
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
         GameManager.Instance.DestroyMap();
-        GameManager.Instance.LoadMap("Assets/Resources/Maps/Map"+levelIndex.ToString()+".xml");
+        GameManager.Instance.LoadMap("/StreamingAssets/Maps/Map"+levelIndex.ToString()+".xml");
 
         //AudioManager.Instance.PlayAudio("BGM");
         AudioManager.Instance.StopAudio("MenuBGM");
@@ -139,4 +142,12 @@ public class UIManager : MonoBehaviour
         }
         return scoreText;
     }
+
+    //private Camera GetMainCamera()
+    //{
+    //    if(mainCamera==null)
+    //    {
+    //        mainCamera = Camera.;
+    //    }
+    //}
 }

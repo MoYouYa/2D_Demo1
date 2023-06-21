@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 public class GUIStyleViewer : EditorWindow
 {
     private Vector2 scrollVector2 = Vector2.zero;
@@ -51,3 +52,4 @@ public class GUIStyleViewer : EditorWindow
         GUILayout.Space(10);
     }
 }
+#endif

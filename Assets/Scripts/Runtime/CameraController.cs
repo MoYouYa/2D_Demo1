@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour
 {
     private Player player;
     private Border border;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,11 +41,11 @@ public class CameraController : MonoBehaviour
             {
                 if (Math.Abs(playerPosition.x - transform.position.x) > 1.5f)
                 {
-                    transform.Translate(new Vector2(playerPosition.x - transform.position.x, 0) * Time.deltaTime);
+                    transform.Translate(new Vector2(playerPosition.x - transform.position.x, 0).normalized * Time.deltaTime);
                 }
                 if (Math.Abs(playerPosition.y - transform.position.y) > 0.6f )
                 {
-                    transform.Translate(new Vector2(0, playerPosition.y - transform.position.y) * Time.deltaTime);
+                    transform.Translate(new Vector2(0, playerPosition.y - transform.position.y).normalized * Time.deltaTime);
                 }
 
             }

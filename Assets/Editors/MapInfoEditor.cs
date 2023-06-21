@@ -34,6 +34,7 @@ public class ObjectInfoNode
 }
 
 
+#if UNITY_EDITOR
 public class MapInfoEditor : EditorWindow
 {
     private string filePath;
@@ -285,4 +286,4 @@ public class MapInfoEditor : EditorWindow
         }
     }
 }
-
+#endif
